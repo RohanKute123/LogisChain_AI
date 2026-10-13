@@ -1,0 +1,403 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LogisChain AI | Intelligence Dashboard</title>
+    <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #0b1120;
+            color: #e5e7eb;
+        }
+
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 235px;
+            background: #111a2e;
+            padding: 28px 18px;
+            border-right: 1px solid #26334b;
+        }
+
+        .brand {
+            font-size: 21px;
+            font-weight: bold;
+            color: #60a5fa;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            color: #94a3b8;
+            font-size: 12px;
+            margin-bottom: 35px;
+        }
+
+        .nav a {
+            display: block;
+            padding: 13px;
+            margin: 8px 0;
+            border-radius: 8px;
+            text-decoration: none;
+            color: #cbd5e1;
+            background: transparent;
+        }
+
+        .nav a:hover, .nav a.active {
+            background: #1e3a5f;
+            color: #93c5fd;
+        }
+
+        main {
+            flex: 1;
+            padding: 30px;
+            min-width: 0;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-bottom: 28px;
+        }
+
+        h1 {
+            font-size: 27px;
+            margin-bottom: 8px;
+        }
+
+        .muted {
+            color: #94a3b8;
+            font-size: 13px;
+        }
+
+        .status {
+            padding: 9px 13px;
+            border-radius: 20px;
+            background: #123b32;
+            color: #6ee7b7;
+            font-size: 12px;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .card, .panel {
+            background: #111a2e;
+            border: 1px solid #26334b;
+            border-radius: 13px;
+            padding: 20px;
+        }
+
+        .card-label {
+            color: #94a3b8;
+            font-size: 13px;
+            margin-bottom: 14px;
+        }
+
+        .value {
+            font-size: 27px;
+            font-weight: bold;
+            margin-bottom: 9px;
+            overflow-wrap: anywhere;
+        }
+
+        .blue { color: #60a5fa; }
+        .green { color: #6ee7b7; }
+        .orange { color: #fdba74; }
+        .purple { color: #c4b5fd; }
+
+        .charts {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 20px;
+        }
+
+        .panel h2 {
+            font-size: 17px;
+            margin-bottom: 8px;
+        }
+
+        .chart {
+            width: 100%;
+            min-height: 310px;
+        }
+
+        .model-list {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 14px;
+            margin-top: 20px;
+        }
+
+        .model {
+            background: #0b1120;
+            border: 1px solid #26334b;
+            border-radius: 9px;
+            padding: 16px;
+        }
+
+        .model strong {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .footer {
+            color: #64748b;
+            font-size: 12px;
+            margin-top: 25px;
+            line-height: 1.7;
+        }
+
+        @media (max-width: 1050px) {
+            .cards {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .model-list {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 760px) {
+            .layout {
+                display: block;
+            }
+
+            .sidebar {
+                width: 100%;
+                padding: 18px;
+            }
+
+            .subtitle {
+                margin-bottom: 15px;
+            }
+
+            .nav {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 5px;
+            }
+
+            .nav a {
+                padding: 10px;
+                margin: 0;
+                font-size: 13px;
+            }
+
+            main {
+                padding: 18px;
+            }
+
+            .charts, .cards {
+                grid-template-columns: 1fr;
+            }
+
+            h1 {
+                font-size: 23px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="layout">
+    <aside class="sidebar">
+        <div class="brand">LogisChain AI</div>
+        <div class="subtitle">Predictive Trade Finance & Logistics</div>
+
+        <nav class="nav">
+            <a href="/" class="active">Dashboard</a>
+            <a href="/shipment">Shipment Risk</a>
+            <a href="/demand">Demand Forecast</a>
+            <a href="/trade-finance">Trade Finance</a>
+            <a href="/analytics">Analytics & Reports</a>
+        </nav>
+    </aside>
+
+    <main>
+        <div class="topbar">
+            <div>
+                <h1>Supply Chain Intelligence</h1>
+                <p class="muted">Logistics, demand and trade-finance overview</p>
+            </div>
+            <div class="status">● Application Dashboard</div>
+        </div>
+
+        <section class="cards">
+            <div class="card">
+                <div class="card-label">Logistics Records</div>
+                <div class="value blue" id="shipments">—</div>
+                <div class="muted">Rows in available dataset</div>
+            </div>
+
+            <div class="card">
+                <div class="card-label">Shipment Model</div>
+                <div class="value green" id="shipmentModel">—</div>
+                <div class="muted">Model availability</div>
+            </div>
+
+            <div class="card">
+                <div class="card-label">Demand Model</div>
+                <div class="value orange" id="demandModel">—</div>
+                <div class="muted">Model availability</div>
+            </div>
+
+            <div class="card">
+                <div class="card-label">Trade Finance Model</div>
+                <div class="value purple" id="tradeModel">—</div>
+                <div class="muted">Model availability</div>
+            </div>
+        </section>
+
+        <section class="charts">
+            <div class="panel">
+                <h2>Model Availability</h2>
+                <p class="muted">Status of trained prediction models</p>
+                <div id="modelChart" class="chart"></div>
+            </div>
+
+            <div class="panel">
+                <h2>Next 7-Day Demand Forecast</h2>
+                <p class="muted">Forecast data generated by the demand module</p>
+                <div id="demandChart" class="chart"></div>
+            </div>
+        </section>
+
+        <section class="panel" style="margin-top:20px">
+            <h2>Project Modules</h2>
+            <p class="muted">Model availability is not the same as model accuracy.</p>
+
+            <div class="model-list">
+                <div class="model">
+                    <strong>Shipment Risk Prediction</strong>
+                    <span class="muted">Classifies shipment delivery risk using logistics features.</span>
+                </div>
+
+                <div class="model">
+                    <strong>Demand Forecasting</strong>
+                    <span class="muted">Estimates future item demand from historical sales.</span>
+                </div>
+
+                <div class="model">
+                    <strong>Trade Finance Risk</strong>
+                    <span class="muted">Demonstrates invoice and buyer risk classification.</span>
+                </div>
+            </div>
+        </section>
+
+        <div class="footer">
+            LogisChain AI · Data Science Project<br>
+            Predictions are estimates. Verify data quality and model performance before real-world use.
+        </div>
+    </main>
+</div>
+
+<script>
+    const layoutBase = {
+        paper_bgcolor: "rgba(0,0,0,0)",
+        plot_bgcolor: "rgba(0,0,0,0)",
+        font: {color: "#cbd5e1"},
+        margin: {l: 45, r: 15, t: 20, b: 45}
+    };
+
+    async function loadDashboard() {
+        try {
+            const response = await fetch("/api/health");
+            const data = await response.json();
+
+            const available = value =>
+                value === true || value === "loaded" || value === "available";
+
+            const shipmentLoaded = available(data.shipment_model);
+            const demandLoaded = available(data.demand_model);
+            const tradeLoaded = available(data.trade_finance_model);
+
+            document.getElementById("shipments").textContent =
+                Number(data.logistics_rows || 0).toLocaleString();
+
+            document.getElementById("shipmentModel").textContent =
+                shipmentLoaded ? "Loaded" : "Missing";
+
+            document.getElementById("demandModel").textContent =
+                demandLoaded ? "Loaded" : "Missing";
+
+            document.getElementById("tradeModel").textContent =
+                tradeLoaded ? "Loaded" : "Missing";
+
+            Plotly.newPlot("modelChart", [{
+                type: "bar",
+                x: ["Shipment", "Demand", "Trade Finance"],
+                y: [shipmentLoaded, demandLoaded, tradeLoaded].map(v => v ? 1 : 0),
+                marker: {color: ["#60a5fa", "#6ee7b7", "#c4b5fd"]},
+                text: [shipmentLoaded, demandLoaded, tradeLoaded]
+                    .map(v => v ? "Loaded" : "Missing"),
+                textposition: "outside"
+            }], {
+                ...layoutBase,
+                yaxis: {
+                    visible: false,
+                    range: [0, 1.25]
+                },
+                xaxis: {fixedrange: true}
+            }, {responsive: true, displayModeBar: false});
+
+            const forecastResponse = await fetch("/api/forecast-data");
+
+            if (!forecastResponse.ok) {
+                throw new Error("Forecast API is not available");
+            }
+
+            const forecast = await forecastResponse.json();
+
+            if (forecast.dates && forecast.values &&
+                forecast.dates.length > 0) {
+                Plotly.newPlot("demandChart", [{
+                    type: "scatter",
+                    mode: "lines+markers",
+                    x: forecast.dates,
+                    y: forecast.values,
+                    line: {color: "#60a5fa", width: 3},
+                    marker: {size: 7}
+                }], {
+                    ...layoutBase,
+                    xaxis: {title: "Date"},
+                    yaxis: {title: "Forecast demand"}
+                }, {responsive: true, displayModeBar: false});
+            } else {
+                document.getElementById("demandChart").innerHTML =
+                    "<p class='muted'>No forecast records available yet.</p>";
+            }
+        } catch (error) {
+            document.getElementById("modelChart").innerHTML =
+                "<p class='muted'>Dashboard API unavailable. Check app.py.</p>";
+
+            document.getElementById("demandChart").innerHTML =
+                "<p class='muted'>Could not load forecast data.</p>";
+
+            console.error(error);
+        }
+    }
+
+    loadDashboard();
+</script>
+</body>
+</html>
+```

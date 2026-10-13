@@ -1,0 +1,11 @@
+Dataset rows: 3000
+Accuracy: 0.9950
+
+              precision    recall  f1-score   support
+
+           0       0.99      1.00      0.99       234
+           1       1.00      0.99      1.00       366
+
+    accuracy                           0.99       600
+   macro avg       0.99      1.00      0.99       600
+weighted avg       1.00      0.99      1.00       600
